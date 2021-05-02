@@ -1,0 +1,98 @@
+﻿@model IEnumerable<SimplePurchase.Service.Models.ProductViewModel>
+@{
+    ViewData["Title"] = "Store";
+}
+<style>
+    .products-list {
+        display: flex;
+        min-height: 200px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .product-item {
+        min-width: 150px;
+        min-height: 100px;
+        border: 1px solid lightgrey;
+        padding: 10px;
+        margin: 10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .product-item-image-pic {
+        width: 120px;
+    }
+
+    .manage-purchase {
+        min-height: 100px;
+        display: flex;
+    }
+
+    .purchase-submit-button {
+        width: 200px;
+        background-color: darkslateblue;
+        color: white;
+        margin: auto;
+        padding: 10px 20px;
+        font-weight: 200;
+        cursor: pointer;
+    }
+
+    .purchase-result-container {
+        min-height: 200px;
+        display: flex;
+        padding: 20px;
+    }
+
+    .purchase-result {
+    }
+</style>
+<div class="text-center">
+    <h1 class="display-4">Store</h1>
+    <div class="products-list">
+        @foreach (var item in Model)
+        {
+            <div class="product-item">
+                <div class="product-item-image">
+                    <img class="product-item-image-pic" src="@item.ImageLink" />
+                </div>
+                <div class="product-item-model">@item.Model</div>
+                <div class="product-item-brand">@item.Brand</div>
+                <div class="product-item-price">@item.Price</div>
+                <input class="product-item-count" type="number" product-id="@item.ProductId" product-name="@item.ProductLabel" />
+            </div>
+        }
+    </div>
+    <div class="manage-purchase">
+        <div class="purchase-submit-button" onclick="finalizePurchase()">Finalize Purchase</div>
+    </div>
+    <div class="purchase-result-container">
+        <div id="purchase-result"></div>
+    </div>
+</div>
+
+<script>
+    finalizePurchase = function () {
+
+        var productsToOrder = [];
+
+        var result = document.getElementById("purchase-result");
+        result.innerHTML = "";
+        var productsCounts = document.getElementsByClassName("product-item-count");
+        var i = 0;
+        for (i; i < productsCounts.length; i++) {
+            if (productsCounts[i].value != 0) {
+                result.innerHTML += "<p>" + productsCounts[i].getAttribute("product-name") + ": " + productsCounts[i].value + "</p>";
+                productsToOrder.push({ name: productsCounts[i].getAttribute("product-name"), count: productsCounts[i].value })
+            }
+        }
+
+        $.post('@Url.Action("CreatePurchase")', { products: productsToOrder },
+           function () {
+               $('#purchase-result').html('"CreatePurchase()" successfully called.');
+           });
+    }
+
+</script>

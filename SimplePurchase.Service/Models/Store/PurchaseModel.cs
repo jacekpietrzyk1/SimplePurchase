@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace SimpleApplication.Domain.Models
+namespace SimplePurchase.Service.Models.Store
 {
-    public class PurchaseEntity
+    public class PurchaseModel
     {
         public string Id { get; set; }
         public string UserId { get; set; }
@@ -10,6 +10,7 @@ namespace SimpleApplication.Domain.Models
         public int TotalCount { get; set; }
         public DateTime CreationDate { get; set; }
         public bool IsConfirmed { get; set; }
-        public bool IsProcessed => false;
+        public bool IsProcessed { get; set; }
     }
+
 }

@@ -5,6 +5,8 @@ namespace SimplePurchase.Application.Interfaces
 {
     public interface IProductRepository
     {
-        public IEnumerable<ProductEntity> GetAllProducts();
+        IEnumerable<ProductEntity> GetAllProducts();
+        IEnumerable<ProductEntity> GetPurchaseProducts(int[] productIds);
+
     }
 }

@@ -10,6 +10,7 @@ namespace SimplePurchase.Infrastructure
         {
             services.AddTransient<IProductRepository, ProductRepository>();
             services.AddTransient<IPurchaseRepository, PurchaseRepository>();
+            services.AddTransient<ILineItemRepository, LineItemRepository>();
         }
     }
 }

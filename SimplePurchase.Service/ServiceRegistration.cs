@@ -10,6 +10,7 @@ namespace SimplePurchase.Service
         public static void AddServices(this IServiceCollection services)
         {
             services.AddTransient<IProductService, ProductService>();
+            services.AddTransient<IPurchaseService, PurchaseService>();
             services.AddTransient<IEmailService, EmailService>();
         }
     }

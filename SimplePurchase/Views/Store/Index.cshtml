@@ -85,7 +85,7 @@
         for (i; i < productsCounts.length; i++) {
             if (productsCounts[i].value != 0) {
                 result.innerHTML += "<p>" + productsCounts[i].getAttribute("product-name") + ": " + productsCounts[i].value + "</p>";
-                productsToOrder.push({ name: productsCounts[i].getAttribute("product-name"), count: productsCounts[i].value })
+                productsToOrder.push({ productId: productsCounts[i].getAttribute("product-id"), count: productsCounts[i].value })
             }
         }
 

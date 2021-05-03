@@ -17,17 +17,19 @@ namespace SimplePurchase.Infrastructure.Repositories
             try
             {
                 status = Execute(
-                    $"INSERT INTO {base.GetTableName()} ([Id],[Count],[ProductId],[CreationDate],[IsConfirmed]) " +
-                    "VALUES (@Id,@Count,@ProductId,@CreationDate,@IsConfirmed)", new
+                    $"INSERT INTO {base.GetTableName()} ([Id],[UserId],[Total],[TotalCount],[CreationDate],[IsConfirmed],[IsProcessed]) " +
+                    "VALUES (@Id,@UserId, @Total, @TotalCount, @CreationDate,@IsConfirmed, @IsProcessed)", new
                     {
                         newPurchase.Id,
-                        newPurchase.Count,
-                        newPurchase.ProductId,
+                        newPurchase.UserId,
+                        newPurchase.Total,
+                        newPurchase.TotalCount,
                         newPurchase.CreationDate,
-                        newPurchase.IsConfirmed
+                        newPurchase.IsConfirmed,
+                        newPurchase.IsProcessed
                     });
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return -1;
             }

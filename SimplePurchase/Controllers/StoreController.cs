@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SimplePurchase.Service.Interfaces;
+using SimplePurchase.Service.Models.Store;
 using SimplePurchase.Web.Areas.Identity.Data;
-using SimplePurchase.Web.Models.Purchase;
 using System.Collections.Generic;
 
 namespace SimplePurchase.Controllers
@@ -12,11 +12,13 @@ namespace SimplePurchase.Controllers
     {
         private readonly IProductService _productService;
         private readonly UserManager<SimplePurchaseWebUser> _userManager;
-
+        private readonly IPurchaseService _purchaseService;
         public StoreController(IProductService productService,
+            IPurchaseService purchaseService,
             UserManager<SimplePurchaseWebUser> userManager)
         {
             _productService = productService;
+            _purchaseService = purchaseService;
             _userManager = userManager;
         }
 
@@ -29,10 +31,12 @@ namespace SimplePurchase.Controllers
 
         [Authorize]
         [HttpPost]
-        public IActionResult CreatePurchase(IEnumerable<ProductRequestModel> products)
+        public IActionResult CreatePurchase(IEnumerable<ProductModel> products)
         {
-            var user = User;
-        
+
+            var userId = _userManager.GetUserId(User);
+            var result = _purchaseService.AddPurchase(products, userId);
+
             return null;
         }
     }

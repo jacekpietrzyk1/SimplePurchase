@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using SimpleApplication.Domain.Models;
 using SimplePurchase.Service.Models;
+using SimplePurchase.Service.Models.Store;
 using System;
 
 namespace SimplePurchase.Service.Automapper
@@ -26,6 +27,10 @@ namespace SimplePurchase.Service.Automapper
         public MappingProfile()
         {
             CreateMap<ProductEntity, ProductViewModel>().ForMember(o => o.ProductId, b => b.MapFrom(z => z.Id));
+            CreateMap<ProductEntity, ProductModel>().ForMember(o => o.ProductId, b => b.MapFrom(z => z.Id));
+            CreateMap<ProductModel, ProductEntity>().ForMember(o => o.Id, b => b.MapFrom(z => z.ProductId));
+            CreateMap<PurchaseEntity, PurchaseModel>();
+            CreateMap<PurchaseModel, PurchaseEntity>();
         }
     }
 }

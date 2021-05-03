@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using SimplePurchase.Service.Interfaces.Contact;
 using SimplePurchase.Service.Models.Contact;
+using SimplePurchase.Web.Areas.Identity.Data;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -19,14 +20,14 @@ namespace SimplePurchase.Web.Areas.Identity.Pages.Account
     [AllowAnonymous]
     public class RegisterModel : PageModel
     {
-        private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly SignInManager<SimplePurchaseWebUser> _signInManager;
+        private readonly UserManager<SimplePurchaseWebUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailService _emailService;
 
         public RegisterModel(
-            UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager,
+            UserManager<SimplePurchaseWebUser> userManager,
+            SignInManager<SimplePurchaseWebUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailService emailService)
         {
@@ -45,6 +46,16 @@ namespace SimplePurchase.Web.Areas.Identity.Pages.Account
 
         public class InputModel
         {
+            [Required]
+            [DataType(DataType.Text)]
+            [Display(Name = "Firstname")]
+            public string Firstname { get; set; }
+
+            [Required]
+            [DataType(DataType.Text)]
+            [Display(Name = "Lastname")]
+            public string Lastname { get; set; }
+
             [Required]
             [EmailAddress]
             [Display(Name = "Email")]
@@ -74,7 +85,14 @@ namespace SimplePurchase.Web.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = new IdentityUser { UserName = Input.Email, Email = Input.Email };
+                var user = new SimplePurchaseWebUser
+                {
+                    UserName = Input.Email,
+                    Email = Input.Email,
+                    Firstname = Input.Firstname,
+                    Lastname = Input.Lastname
+                };
+
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {

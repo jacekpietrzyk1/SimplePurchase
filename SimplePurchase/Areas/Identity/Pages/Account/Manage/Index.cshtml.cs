@@ -1,22 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using SimplePurchase.Web.Areas.Identity.Data;
+using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
 
 namespace SimplePurchase.Web.Areas.Identity.Pages.Account.Manage
 {
     public partial class IndexModel : PageModel
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<SimplePurchaseWebUser> _userManager;
+        private readonly SignInManager<SimplePurchaseWebUser> _signInManager;
 
         public IndexModel(
-            UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager)
+            UserManager<SimplePurchaseWebUser> userManager,
+            SignInManager<SimplePurchaseWebUser> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -32,12 +30,22 @@ namespace SimplePurchase.Web.Areas.Identity.Pages.Account.Manage
 
         public class InputModel
         {
+            [Required]
+            [DataType(DataType.Text)]
+            [Display(Name = "Firstname")]
+            public string Firstname { get; set; }
+
+            [Required]
+            [DataType(DataType.Text)]
+            [Display(Name = "Lastname")]
+            public string Lastname { get; set; }
+
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
         }
 
-        private async Task LoadAsync(IdentityUser user)
+        private async Task LoadAsync(SimplePurchaseWebUser user)
         {
             var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
@@ -46,6 +54,8 @@ namespace SimplePurchase.Web.Areas.Identity.Pages.Account.Manage
 
             Input = new InputModel
             {
+                Firstname = user.Firstname,
+                Lastname = user.Lastname,
                 PhoneNumber = phoneNumber
             };
         }
@@ -86,6 +96,18 @@ namespace SimplePurchase.Web.Areas.Identity.Pages.Account.Manage
                     return RedirectToPage();
                 }
             }
+
+            if (Input.Firstname != user.Firstname)
+            {
+                user.Firstname = Input.Firstname;
+            }
+
+            if (Input.Lastname != user.Lastname)
+            {
+                user.Lastname = Input.Lastname;
+            }
+
+            await _userManager.UpdateAsync(user);
 
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Your profile has been updated";

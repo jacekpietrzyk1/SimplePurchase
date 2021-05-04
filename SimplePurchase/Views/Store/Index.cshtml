@@ -89,10 +89,13 @@
             }
         }
 
-        $.post('@Url.Action("CreatePurchase")', { products: productsToOrder },
-           function () {
-               $('#purchase-result').html('"CreatePurchase()" successfully called.');
-           });
+        $.post('@Url.Action("CreatePurchase")', { products: productsToOrder })
+            .done( function () {
+                $('#purchase-result').html('Purchase submitted');
+            })
+            .fail(function () {
+                $('#purchase-result').html('Purchase failed');
+            });
     }
 
 </script>

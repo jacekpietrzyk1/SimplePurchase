@@ -5,6 +5,7 @@ using SimplePurchase.Service.Interfaces;
 using SimplePurchase.Service.Models.Store;
 using SimplePurchase.Web.Areas.Identity.Data;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SimplePurchase.Controllers
 {
@@ -33,11 +34,17 @@ namespace SimplePurchase.Controllers
         [HttpPost]
         public IActionResult CreatePurchase(IEnumerable<ProductModel> products)
         {
+            if(!ModelState.IsValid)
+            {
+                return BadRequest("You have to order more than 0");
+            }
 
             var userId = _userManager.GetUserId(User);
             var result = _purchaseService.AddPurchase(products, userId);
+            if(result)
+                return Ok();
 
-            return null;
+            return StatusCode(304);
         }
     }
 }

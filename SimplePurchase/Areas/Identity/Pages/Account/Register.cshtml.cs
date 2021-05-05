@@ -57,6 +57,11 @@ namespace SimplePurchase.Web.Areas.Identity.Pages.Account
             public string Lastname { get; set; }
 
             [Required]
+            [DataType(DataType.Text)]
+            [Display(Name = "Country")]
+            public string Country { get; set; }
+
+            [Required]
             [EmailAddress]
             [Display(Name = "Email")]
             public string Email { get; set; }
@@ -90,7 +95,8 @@ namespace SimplePurchase.Web.Areas.Identity.Pages.Account
                     UserName = Input.Email,
                     Email = Input.Email,
                     Firstname = Input.Firstname,
-                    Lastname = Input.Lastname
+                    Lastname = Input.Lastname,
+                    Country = Input.Country
                 };
 
                 var result = await _userManager.CreateAsync(user, Input.Password);

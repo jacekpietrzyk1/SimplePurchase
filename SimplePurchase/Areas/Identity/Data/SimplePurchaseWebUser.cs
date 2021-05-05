@@ -10,5 +10,8 @@ namespace SimplePurchase.Web.Areas.Identity.Data
 
         [PersonalData]
         public string Lastname { get; set; }
+
+        [PersonalData]
+        public string Country { get; set; }
     }
 }

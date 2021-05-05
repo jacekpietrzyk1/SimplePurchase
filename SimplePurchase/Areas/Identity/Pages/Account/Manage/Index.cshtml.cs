@@ -40,6 +40,11 @@ namespace SimplePurchase.Web.Areas.Identity.Pages.Account.Manage
             [Display(Name = "Lastname")]
             public string Lastname { get; set; }
 
+            [Required]
+            [DataType(DataType.Text)]
+            [Display(Name = "Country")]
+            public string Country { get; set; }
+
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
@@ -56,6 +61,7 @@ namespace SimplePurchase.Web.Areas.Identity.Pages.Account.Manage
             {
                 Firstname = user.Firstname,
                 Lastname = user.Lastname,
+                Country = user.Country,
                 PhoneNumber = phoneNumber
             };
         }
@@ -105,6 +111,11 @@ namespace SimplePurchase.Web.Areas.Identity.Pages.Account.Manage
             if (Input.Lastname != user.Lastname)
             {
                 user.Lastname = Input.Lastname;
+            }
+
+            if (Input.Country != user.Country)
+            {
+                user.Country = Input.Country;
             }
 
             await _userManager.UpdateAsync(user);

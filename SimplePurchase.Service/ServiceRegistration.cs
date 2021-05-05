@@ -12,6 +12,7 @@ namespace SimplePurchase.Service
             services.AddTransient<IProductService, ProductService>();
             services.AddTransient<IPurchaseService, PurchaseService>();
             services.AddTransient<IEmailService, EmailService>();
+            services.AddTransient<IUserService, UserService>();
         }
     }
 }

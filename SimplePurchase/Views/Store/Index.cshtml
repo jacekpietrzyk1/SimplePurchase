@@ -2,53 +2,8 @@
 @{
     ViewData["Title"] = "Store";
 }
-<style>
-    .products-list {
-        display: flex;
-        min-height: 200px;
-        flex-wrap: wrap;
-        justify-content: center;
-    }
+<link href="@Url.Content("~/Css/Store/store-products.css")" rel="stylesheet" />
 
-    .product-item {
-        min-width: 150px;
-        min-height: 100px;
-        border: 1px solid lightgrey;
-        padding: 10px;
-        margin: 10px;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-    }
-
-    .product-item-image-pic {
-        width: 120px;
-    }
-
-    .manage-purchase {
-        min-height: 100px;
-        display: flex;
-    }
-
-    .purchase-submit-button {
-        width: 200px;
-        background-color: darkslateblue;
-        color: white;
-        margin: auto;
-        padding: 10px 20px;
-        font-weight: 200;
-        cursor: pointer;
-    }
-
-    .purchase-result-container {
-        min-height: 200px;
-        display: flex;
-        padding: 20px;
-    }
-
-    .purchase-result {
-    }
-</style>
 <div class="text-center">
     <h1 class="display-4">Store</h1>
     <div class="products-list">
@@ -84,7 +39,7 @@
         var i = 0;
         for (i; i < productsCounts.length; i++) {
             if (productsCounts[i].value != 0) {
-                result.innerHTML += "<p>" + productsCounts[i].getAttribute("product-name") + ": " + productsCounts[i].value + "</p>";
+                //result.innerHTML += "<p>" + productsCounts[i].getAttribute("product-name") + ": " + productsCounts[i].value + "</p>";
                 productsToOrder.push({ productId: productsCounts[i].getAttribute("product-id"), count: productsCounts[i].value })
             }
         }

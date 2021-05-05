@@ -53,5 +53,37 @@ namespace SimplePurchase.Infrastructure.Repositories
                 return null;
             }
         }
+
+        public int MarkPurchaseAsProcessed(string purchaseId)
+        {
+            int status = -1;
+
+            try
+            {
+                status = Execute($"UPDATE {base.GetTableName()} SET [IsProcessed] = 1 WHERE Id = @id", new { id = purchaseId });
+            }
+            catch (Exception)
+            {
+                return -1;
+            }
+
+            return status;
+        }
+
+        public int MarkPurchaseAsSuspended(string purchaseId)
+        {
+            int status = -1;
+
+            try
+            {
+                status = Execute($"UPDATE {base.GetTableName()} SET [IsSuspended] = 1 WHERE Id = @id", new { id = purchaseId });
+            }
+            catch (Exception)
+            {
+                return -1;
+            }
+
+            return status;
+        }
     }
 }

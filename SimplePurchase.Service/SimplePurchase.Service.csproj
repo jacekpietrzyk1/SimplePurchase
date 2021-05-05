@@ -15,8 +15,4 @@
     <ProjectReference Include="..\SimplePurchase.Application\SimplePurchase.Application.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Services\Contact\" />
-  </ItemGroup>
-
 </Project>

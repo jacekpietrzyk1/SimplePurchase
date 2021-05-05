@@ -7,5 +7,9 @@ namespace SimplePurchase.Service.Interfaces
     {
         bool AddPurchase(IEnumerable<ProductModel> products, string userId);
         IEnumerable<PurchaseModel> GetNewPurchases();
+
+        bool SuspendPurchase(string purchaseId);
+
+        bool MarkAsProcessed(string purchaseId);
     }
 }

@@ -32,4 +32,8 @@
     <Folder Include="Models\Purchase\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="wwwroot\css\Store\store-products.css" />
+  </ItemGroup>
+
 </Project>

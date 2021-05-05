@@ -8,5 +8,9 @@ namespace SimplePurchase.Application.Interfaces
         int AddPurchase(PurchaseEntity newPurchase);
 
         IEnumerable<PurchaseEntity> GetNewPurchases();
+
+        int MarkPurchaseAsProcessed(string purchaseId);
+
+        int MarkPurchaseAsSuspended(string purchaseId);
     }
 }

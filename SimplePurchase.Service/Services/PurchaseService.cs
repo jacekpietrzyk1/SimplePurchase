@@ -39,6 +39,7 @@ namespace SimplePurchase.Service.Services
                 UserId = userId,
                 CreationDate = DateTime.UtcNow,
                 IsConfirmed = false,
+                IsProcessed = false,
                 Total = totalCalculated,
                 TotalCount = orderedProducts.Sum(t => t.Count)
             };
@@ -105,6 +106,32 @@ namespace SimplePurchase.Service.Services
             var newPurchaseModels = Mapping.Mapper.Map<IEnumerable<PurchaseModel>>(newPurchaseEntities);
 
             return newPurchaseModels;
+        }
+
+        public bool SuspendPurchase(string purchaseId)
+        {
+            try
+            {
+                var result = _purchaseRepository.MarkPurchaseAsSuspended(purchaseId);
+                return result > 0;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public bool MarkAsProcessed(string purchaseId)
+        {
+            try
+            {
+                var result = _purchaseRepository.MarkPurchaseAsProcessed(purchaseId);
+                return result > 0;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
     }
 }

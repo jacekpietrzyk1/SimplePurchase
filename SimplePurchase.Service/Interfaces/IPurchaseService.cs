@@ -6,5 +6,6 @@ namespace SimplePurchase.Service.Interfaces
     public interface IPurchaseService
     {
         bool AddPurchase(IEnumerable<ProductModel> products, string userId);
+        IEnumerable<PurchaseModel> GetNewPurchases();
     }
 }

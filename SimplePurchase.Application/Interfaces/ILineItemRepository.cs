@@ -5,6 +5,6 @@ namespace SimplePurchase.Application.Interfaces
 {
     public interface ILineItemRepository
     {
-        public int AddLineItems(IEnumerable<LineItemEntity> lineitems);
+        int AddLineItems(IEnumerable<LineItemEntity> lineitems);
     }
 }

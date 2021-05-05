@@ -2,6 +2,7 @@
 using SimpleApplication.Domain.Models;
 using SimplePurchase.Application.Interfaces;
 using System;
+using System.Collections.Generic;
 
 namespace SimplePurchase.Infrastructure.Repositories
 {
@@ -29,12 +30,26 @@ namespace SimplePurchase.Infrastructure.Repositories
                         newPurchase.IsProcessed
                     });
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return -1;
             }
 
             return status;
+        }
+
+        public IEnumerable<PurchaseEntity> GetNewPurchases()
+        {
+            try
+            {
+                var result = Query<PurchaseEntity>($"SELECT * FROM {base.GetTableName()} WHERE [IsProcessed] = 0");
+                return result;
+
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
     }
 }

@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Hangfire;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SimplePurchase.Service.Interfaces;
 using SimplePurchase.Service.Models.Store;
 using SimplePurchase.Web.Areas.Identity.Data;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -34,17 +36,19 @@ namespace SimplePurchase.Controllers
         [HttpPost]
         public IActionResult CreatePurchase(IEnumerable<ProductModel> products)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return BadRequest("You have to order more than 0");
             }
 
             var userId = _userManager.GetUserId(User);
             var result = _purchaseService.AddPurchase(products, userId);
-            if(result)
+            if (result)
                 return Ok();
 
             return StatusCode(304);
         }
+
+     
     }
 }

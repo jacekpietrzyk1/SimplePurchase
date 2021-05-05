@@ -20,16 +20,13 @@ namespace SimplePurchase.Infrastructure.Repositories
         {
             try
             {
-                var result = Query<ProductEntity>($"SELECT * FROM {base.GetTableName()} WHERE id IN @ids",
-                    new { ids = productIds });
+                var result = Query<ProductEntity>($"SELECT * FROM {base.GetTableName()} WHERE id IN @ids", new { ids = productIds });
                 return result;
-
             }
             catch (Exception)
             {
                 return null;
             }
-
         }
     }
 }

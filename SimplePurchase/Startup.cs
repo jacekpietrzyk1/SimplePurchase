@@ -10,9 +10,12 @@ using SimplePurchase.Infrastructure;
 using SimplePurchase.Service;
 using SimplePurchase.Service.Interfaces.Contact;
 using SimplePurchase.Service.Models.Contact;
+using SimplePurchase.Service.Services;
 using SimplePurchase.Web.Areas.Identity.Data;
 using SimplePurchase.Web.Data;
 using SimplePurchase.Web.Hangfire;
+using SimplePurchase.Web.Interfaces;
+using SimplePurchase.Web.PurchaseMonitor;
 using System;
 
 namespace SimplePurchase
@@ -38,9 +41,10 @@ namespace SimplePurchase
                 .AddEntityFrameworkStores<SimplePurchaseWebContext>();
 
             AddEmailServerConfiguration(services);
-
+            services.AddTransient<IMonitor, PurchaseMonitor>();
             services.AddInfrastructure();
             services.AddServices();
+
 
             // Add Hangfire services.
             services.AddHangfire(configuration => configuration
@@ -60,6 +64,7 @@ namespace SimplePurchase
             services.AddHangfireServer();
 
             services.AddControllersWithViews();
+
         }
 
         private void AddEmailServerConfiguration(IServiceCollection services)
@@ -94,7 +99,7 @@ namespace SimplePurchase
                 Authorization = new[] { new MyAuthorizationFilter() }
             });
 
-            backgroundJobs.Enqueue(() => Console.WriteLine("Hello world from Hangfire!"));
+            RecurringJob.AddOrUpdate<IMonitor>(t => t.PurchaseMonitorSystem(), Cron.Minutely);
 
             app.UseEndpoints(endpoints =>
             {

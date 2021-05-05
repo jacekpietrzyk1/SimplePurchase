@@ -47,7 +47,7 @@ namespace SimplePurchase.Service.Services
 
             var result = _purchaseRepository.AddPurchase(purchaseEntity);
             int lineItemResult = 0;
-            if(result > 0)
+            if (result > 0)
             {
                 var lineItems = GetLineItems(fullProducts, orderedProducts, newPurchaseId);
                 lineItemResult = _lineItemRepository.AddLineItems(lineItems);
@@ -60,14 +60,14 @@ namespace SimplePurchase.Service.Services
         {
             var lineItems = new List<LineItemEntity>();
 
-            foreach(var item in orderedProducts)
+            foreach (var item in orderedProducts)
             {
                 lineItems.Add(new LineItemEntity()
                 {
                     ProductId = item.ProductId,
                     PurchaseId = newPurchaseId,
                     Count = item.Count,
-                    Price = fullProducts.FirstOrDefault(t=>t.Id == item.ProductId).Price
+                    Price = fullProducts.FirstOrDefault(t => t.Id == item.ProductId).Price
                 });
             }
 
@@ -82,7 +82,10 @@ namespace SimplePurchase.Service.Services
 
         private decimal GetTotal(IEnumerable<ProductEntity> products, IEnumerable<ProductModel> lineitems)
         {
-            decimal total = 0;
+            decimal total = Decimal.Zero;
+
+            if (!lineitems.Any())
+                return total;
 
             foreach (var item in lineitems)
             {
@@ -90,6 +93,18 @@ namespace SimplePurchase.Service.Services
             }
 
             return total;
+        }
+
+        public IEnumerable<PurchaseModel> GetNewPurchases()
+        {
+            var newPurchaseEntities = _purchaseRepository.GetNewPurchases();
+
+            if (!newPurchaseEntities.Any())
+                return null;
+
+            var newPurchaseModels = Mapping.Mapper.Map<IEnumerable<PurchaseModel>>(newPurchaseEntities);
+
+            return newPurchaseModels;
         }
     }
 }

@@ -42,7 +42,9 @@ namespace SimplePurchase.Infrastructure.Repositories
         {
             try
             {
-                var result = Query<PurchaseEntity>($"SELECT * FROM {base.GetTableName()} WHERE [IsProcessed] = 0");
+                var result = Query<PurchaseEntity>($"SELECT *, CASE WHEN (SELECT count(*) FROM {base.GetTableName()} pi " +
+                    $"WHERE pi.UserId = p.UserId AND pi.IsProcessed = 1 AND pi.IsConfirmed = 1) > 0 " +
+                    $"THEN 0 ELSE 1 END AS IsNewCustomer FROM {base.GetTableName()} p WHERE [IsProcessed] = 0");
                 return result;
 
             }

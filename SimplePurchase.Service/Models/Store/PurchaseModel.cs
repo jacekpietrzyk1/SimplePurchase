@@ -11,6 +11,8 @@ namespace SimplePurchase.Service.Models.Store
         public DateTime CreationDate { get; set; }
         public bool IsConfirmed { get; set; }
         public bool IsProcessed { get; set; }
+
+        public bool IsNewCustomer { get; set; }
     }
 
 }

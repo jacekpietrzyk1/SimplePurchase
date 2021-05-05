@@ -11,5 +11,6 @@ namespace SimpleApplication.Domain.Models
         public DateTime CreationDate { get; set; }
         public bool IsConfirmed { get; set; }
         public bool IsProcessed => false;
+        public bool IsNewCustomer { get; set; }
     }
 }

@@ -7,14 +7,14 @@ using System.Collections.Generic;
 
 namespace SimplePurchase.Web.PurchaseMonitor
 {
-    public class PurchaseMonitor : IMonitor
+    public class PurchaseMonitoring : IMonitoring
     {
         private readonly IConfiguration _configuration;
         private readonly IPurchaseService _purchaseService;
         private readonly IUserService _userService;
         private readonly IEmailService _emailService;
 
-        public PurchaseMonitor(IConfiguration configuration, IPurchaseService purchaseService, IUserService userService, IEmailService emailService)
+        public PurchaseMonitoring(IConfiguration configuration, IPurchaseService purchaseService, IUserService userService, IEmailService emailService)
         {
             _purchaseService = purchaseService;
             _configuration = configuration;
@@ -22,7 +22,7 @@ namespace SimplePurchase.Web.PurchaseMonitor
             _emailService = emailService;
         }
 
-        public bool PurchaseMonitorSystem()
+        public bool PurchaseMonitoringProcess()
         {
             var newPurchases = _purchaseService.GetNewPurchases();
 
@@ -58,6 +58,9 @@ namespace SimplePurchase.Web.PurchaseMonitor
 
         private bool IsCountryToIgnore(string country)
         {
+            if (string.IsNullOrEmpty(country))
+                return false;
+
             var countryToIgnore = _configuration.GetValue<string>("MonitoringSettings:PurchaseCountry");
 
             return country == countryToIgnore;

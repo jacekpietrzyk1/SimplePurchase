@@ -10,7 +10,6 @@ using SimplePurchase.Infrastructure;
 using SimplePurchase.Service;
 using SimplePurchase.Service.Interfaces.Contact;
 using SimplePurchase.Service.Models.Contact;
-using SimplePurchase.Service.Services;
 using SimplePurchase.Web.Areas.Identity.Data;
 using SimplePurchase.Web.Data;
 using SimplePurchase.Web.Hangfire;
@@ -41,7 +40,7 @@ namespace SimplePurchase
                 .AddEntityFrameworkStores<SimplePurchaseWebContext>();
 
             AddEmailServerConfiguration(services);
-            services.AddTransient<IMonitor, PurchaseMonitor>();
+            services.AddTransient<IMonitoring, PurchaseMonitoring>();
             services.AddInfrastructure();
             services.AddServices();
 
@@ -99,7 +98,7 @@ namespace SimplePurchase
                 Authorization = new[] { new MyAuthorizationFilter() }
             });
 
-            RecurringJob.AddOrUpdate<IMonitor>(t => t.PurchaseMonitorSystem(), Cron.Minutely);
+            RecurringJob.AddOrUpdate<IMonitoring>(t => t.PurchaseMonitoringProcess(), "*/2 * * * *");
 
             app.UseEndpoints(endpoints =>
             {

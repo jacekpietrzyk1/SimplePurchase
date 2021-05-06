@@ -1,13 +1,12 @@
-﻿using Hangfire;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SimplePurchase.Service.Interfaces;
+using SimplePurchase.Service.Interfaces.Contact;
+using SimplePurchase.Service.Models.Contact;
 using SimplePurchase.Service.Models.Store;
 using SimplePurchase.Web.Areas.Identity.Data;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace SimplePurchase.Controllers
 {
@@ -16,13 +15,20 @@ namespace SimplePurchase.Controllers
         private readonly IProductService _productService;
         private readonly UserManager<SimplePurchaseWebUser> _userManager;
         private readonly IPurchaseService _purchaseService;
+        private readonly IUserService _userService;
+        private readonly IEmailService _emailService;
+
         public StoreController(IProductService productService,
             IPurchaseService purchaseService,
-            UserManager<SimplePurchaseWebUser> userManager)
+            UserManager<SimplePurchaseWebUser> userManager,
+            IUserService userService,
+            IEmailService emailService)
         {
             _productService = productService;
             _purchaseService = purchaseService;
             _userManager = userManager;
+            _userService = userService;
+            _emailService = emailService;
         }
 
         [Authorize]
@@ -44,11 +50,28 @@ namespace SimplePurchase.Controllers
             var userId = _userManager.GetUserId(User);
             var result = _purchaseService.AddPurchase(products, userId);
             if (result)
+            {
+                var email = _userService.GetUserEmail(userId);
+                NotifyPurchaseSubmitted(email);
                 return Ok();
+            }
 
             return StatusCode(304);
         }
 
-     
+        private void NotifyPurchaseSubmitted(string emailTo)
+        {
+            if (string.IsNullOrEmpty(emailTo))
+                return;
+
+            var message = new EmailMessage()
+            {
+                ToAddresses = new List<EmailAddress>() { new EmailAddress() { Address = emailTo, Name = emailTo } },
+                Subject = "Your Purchase has been submitted",
+                Content = "Congratulations! We have your purchase! You will be notified about status change as soon as possible"
+            };
+
+            _emailService.SendAsync(message);
+        }
     }
 }

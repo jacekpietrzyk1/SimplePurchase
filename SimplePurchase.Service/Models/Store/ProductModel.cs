@@ -8,7 +8,7 @@ namespace SimplePurchase.Service.Models.Store
         public int ProductId { get; set; }
 
         [Required]
-        [Range(0, 1000)]
+        [Range(0, 1000000)]
         public int Count { get; set; }
     }
 }

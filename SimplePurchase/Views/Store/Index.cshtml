@@ -46,10 +46,10 @@
 
         $.post('@Url.Action("CreatePurchase")', { products: productsToOrder })
             .done( function () {
-                $('#purchase-result').html('Purchase submitted');
+                $('#purchase-result').html('Purchase submitted. You have been notified also by e-mail.');
             })
             .fail(function () {
-                $('#purchase-result').html('Purchase failed');
+                $('#purchase-result').html('Purchase failed. Check amounts of ordered products');
             });
     }
 

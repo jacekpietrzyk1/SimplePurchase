@@ -11,5 +11,7 @@ namespace SimplePurchase.Service.Interfaces
         bool SuspendPurchase(string purchaseId);
 
         bool MarkAsProcessed(string purchaseId);
+
+        decimal GetAveragePurchaseAmount(string userId);
     }
 }

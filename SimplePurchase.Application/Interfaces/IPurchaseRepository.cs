@@ -12,5 +12,7 @@ namespace SimplePurchase.Application.Interfaces
         int MarkPurchaseAsProcessed(string purchaseId);
 
         int MarkPurchaseAsSuspended(string purchaseId);
+
+        decimal GetAveragePurchaseAmount(string userId);
     }
 }

@@ -35,25 +35,39 @@ namespace SimplePurchase.Web.PurchaseMonitor
 
                 if (item.IsNewCustomer && IsCountryToIgnore(country) && IsCountToIgnore(item.TotalCount))
                 {
-                    var isSuccess = _purchaseService.SuspendPurchase(item.Id);
+                    SuspendPurchase(item);
 
-                    if (isSuccess)
-                    {
-                        _purchaseService.MarkAsProcessed(item.Id);
-                        var email = _userService.GetUserEmail(item.UserId);
-                        NotifyAbountPurchaseStatus("Dear User, your purchase has been suspended. We will contact you soon.", email);
-                    }
-
+                }
+                else if (IsAmountStrange(item.UserId, item.TotalCount))
+                {
+                    SuspendPurchase(item);
                 }
                 else
                 {
-                    _purchaseService.MarkAsProcessed(item.Id);
-                    var email = _userService.GetUserEmail(item.UserId);
-                    NotifyAbountPurchaseStatus("Dear User, your purchase has been confirmed.", email);
+                    ConfirmPurchase(item);
                 }
             }
 
             return true;
+        }
+
+        private void ConfirmPurchase(Service.Models.Store.PurchaseModel item)
+        {
+            _purchaseService.MarkAsProcessed(item.Id);
+            var email = _userService.GetUserEmail(item.UserId);
+            NotifyAbountPurchaseStatus("Dear User, your purchase has been confirmed.", email);
+        }
+
+        private void SuspendPurchase(Service.Models.Store.PurchaseModel item)
+        {
+            var isSuccess = _purchaseService.SuspendPurchase(item.Id);
+
+            if (isSuccess)
+            {
+                _purchaseService.MarkAsProcessed(item.Id);
+                var email = _userService.GetUserEmail(item.UserId);
+                NotifyAbountPurchaseStatus("Dear User, your purchase has been suspended. We will contact you soon.", email);
+            }
         }
 
         private bool IsCountryToIgnore(string country)
@@ -71,6 +85,12 @@ namespace SimplePurchase.Web.PurchaseMonitor
             var countToIgnore = _configuration.GetValue<int>("MonitoringSettings:PurchaseCount");
 
             return lineItemsCount > countToIgnore;
+        }
+
+        private bool IsAmountStrange(string userId, int totalPurchaseAmount)
+        {
+            var averageAmount = _purchaseService.GetAveragePurchaseAmount(userId);
+            return totalPurchaseAmount > 5 * decimal.ToInt32(averageAmount);
         }
 
         private void NotifyAbountPurchaseStatus(string purchaseStatus, string emailTo)

@@ -3,6 +3,7 @@ using SimpleApplication.Domain.Models;
 using SimplePurchase.Application.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SimplePurchase.Infrastructure.Repositories
 {
@@ -42,8 +43,8 @@ namespace SimplePurchase.Infrastructure.Repositories
         {
             try
             {
-                var result = Query<PurchaseEntity>($"SELECT *, CASE WHEN (SELECT count(*) FROM {base.GetTableName()} pi " +
-                    $"WHERE pi.UserId = p.UserId AND pi.IsProcessed = 1 AND pi.IsConfirmed = 1) > 0 " +
+                var result = Query<PurchaseEntity>($"SELECT *, CASE WHEN (SELECT COUNT(*) FROM {base.GetTableName()} pi " +
+                    $"WHERE pi.[UserId] = p.[UserId] AND pi.[IsProcessed] = 1 AND pi.[IsConfirmed] = 1) > 0 " +
                     $"THEN 0 ELSE 1 END AS IsNewCustomer FROM {base.GetTableName()} p WHERE [IsProcessed] = 0");
                 return result;
 
@@ -54,13 +55,28 @@ namespace SimplePurchase.Infrastructure.Repositories
             }
         }
 
+        public decimal GetAveragePurchaseAmount(string userId)
+        {
+            try
+            {
+                var result = Query<decimal>($"SELECT SUM(TotalCount)/COUNT(*) FROM {base.GetTableName()} WHERE [UserId] = @userId AND [IsProcessed] = 1",
+                            new { userId = userId }).FirstOrDefault();
+                return result;
+
+            }
+            catch (Exception)
+            {
+                return Decimal.Zero;
+            }
+        }
+
         public int MarkPurchaseAsProcessed(string purchaseId)
         {
             int status = -1;
 
             try
             {
-                status = Execute($"UPDATE {base.GetTableName()} SET [IsProcessed] = 1 WHERE Id = @id", new { id = purchaseId });
+                status = Execute($"UPDATE {base.GetTableName()} SET [IsProcessed] = 1 WHERE [Id] = @id", new { id = purchaseId });
             }
             catch (Exception)
             {

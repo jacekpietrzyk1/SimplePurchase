@@ -110,28 +110,19 @@ namespace SimplePurchase.Service.Services
 
         public bool SuspendPurchase(string purchaseId)
         {
-            try
-            {
-                var result = _purchaseRepository.MarkPurchaseAsSuspended(purchaseId);
-                return result > 0;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
+            var result = _purchaseRepository.MarkPurchaseAsSuspended(purchaseId);
+            return result > 0;
         }
 
         public bool MarkAsProcessed(string purchaseId)
         {
-            try
-            {
-                var result = _purchaseRepository.MarkPurchaseAsProcessed(purchaseId);
-                return result > 0;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
+            var result = _purchaseRepository.MarkPurchaseAsProcessed(purchaseId);
+            return result > 0;
+        }
+
+        public decimal GetAveragePurchaseAmount(string userId)
+        {
+            return _purchaseRepository.GetAveragePurchaseAmount(userId);
         }
     }
 }

@@ -39,6 +39,20 @@ namespace SimplePurchase.Infrastructure.Repositories
             return status;
         }
 
+        public IEnumerable<PurchaseEntity> GetAllUserPurchases(string userId)
+        {
+            try
+            {
+                var result = Query<PurchaseEntity>($"SELECT * FROM {base.GetTableName()} WHERE [UserId] = @userId",
+                            new { userId = userId });
+                return result;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
         public IEnumerable<PurchaseEntity> GetNewPurchases()
         {
             try
@@ -77,6 +91,22 @@ namespace SimplePurchase.Infrastructure.Repositories
             try
             {
                 status = Execute($"UPDATE {base.GetTableName()} SET [IsProcessed] = 1 WHERE [Id] = @id", new { id = purchaseId });
+            }
+            catch (Exception)
+            {
+                return -1;
+            }
+
+            return status;
+        }
+
+        public int MarkPurchaseAsConfirmed(string purchaseId)
+        {
+            int status = -1;
+
+            try
+            {
+                status = Execute($"UPDATE {base.GetTableName()} SET [IsConfirmed] = 1 WHERE [Id] = @id", new { id = purchaseId });
             }
             catch (Exception)
             {

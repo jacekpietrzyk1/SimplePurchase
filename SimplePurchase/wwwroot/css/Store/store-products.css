@@ -27,7 +27,7 @@
 
 .purchase-submit-button {
     width: 200px;
-    background-color: darkslateblue;
+    background-color: rgba(72, 61, 139,1);
     color: white;
     margin: auto;
     padding: 10px 20px;
@@ -35,11 +35,19 @@
     cursor: pointer;
 }
 
+    .purchase-submit-button:hover {
+        background-color: rgba(72, 61, 139,0.85);
+    }
+
 .purchase-result-container {
     min-height: 200px;
     display: flex;
     padding: 20px;
+    font-size: 1.2rem;
+    justify-content: center;
 }
 
 .purchase-result {
+    font-size:1.2rem;
+    text-align:center;
 }

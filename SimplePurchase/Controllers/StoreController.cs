@@ -6,6 +6,7 @@ using SimplePurchase.Service.Interfaces.Contact;
 using SimplePurchase.Service.Models.Contact;
 using SimplePurchase.Service.Models.Store;
 using SimplePurchase.Web.Areas.Identity.Data;
+using SimplePurchase.Web.Models.Store;
 using System.Collections.Generic;
 
 namespace SimplePurchase.Controllers
@@ -57,6 +58,20 @@ namespace SimplePurchase.Controllers
             }
 
             return StatusCode(304);
+        }
+
+        [Authorize]
+        public IActionResult History()
+        {
+            var userId = _userManager.GetUserId(User);
+
+            var historyViewModel = new UserHistoryViewModel()
+            {
+                Purchases = _purchaseService.GetAllUserPurchases(userId),
+                AverageAmount = _purchaseService.GetAveragePurchaseAmount(userId)
+            };
+
+            return View(historyViewModel);
         }
 
         private void NotifyPurchaseSubmitted(string emailTo)

@@ -8,9 +8,13 @@ namespace SimplePurchase.Service.Interfaces
         bool AddPurchase(IEnumerable<ProductModel> products, string userId);
         IEnumerable<PurchaseModel> GetNewPurchases();
 
+        IEnumerable<PurchaseModel> GetAllUserPurchases(string userId);
+
         bool SuspendPurchase(string purchaseId);
 
         bool MarkAsProcessed(string purchaseId);
+
+        bool MarkAsConfirmed(string purchaseId);
 
         decimal GetAveragePurchaseAmount(string userId);
     }

@@ -1,0 +1,49 @@
+﻿@model SimplePurchase.Web.Models.Store.UserHistoryViewModel
+@{
+    ViewData["Title"] = "Store";
+}
+<link href="@Url.Content("~/Css/Store/purchase-history.css")" rel="stylesheet" />
+
+<div class="text-center">
+    <h1 class="display-4">User History</h1>
+    <h5 class="user-average-amount">Average amount (from previous orders): <b>@Model.AverageAmount</b></h5>
+    <h4 class="purchase-history-header">Purchase history</h4>
+
+    <div class="purchase-list">
+        <div class="user-purchase header">
+            <div class="user-purchase-details">Creation Date</div>
+            <div class="user-purchase-details">Total</div>
+            <div class="user-purchase-details">Total Count</div>
+            <div class="user-purchase-details">Is Processed</div>
+            <div class="user-purchase-details">Is Confirmed</div>
+            <div class="user-purchase-details">Is Suspended</div>
+        </div>
+        @if (Model.Purchases is not null && Model.Purchases.Any())
+        {
+            @foreach (var item in Model.Purchases)
+            {
+                <div class="user-purchase">
+
+                    <div class="user-purchase-details">@item.CreationDate</div>
+                    <div class="user-purchase-details">@item.Total</div>
+                    <div class="user-purchase-details">@item.TotalCount</div>
+                    <div class="user-purchase-details">@item.IsProcessed</div>
+                    <div class="user-purchase-details">@item.IsConfirmed</div>
+                    <div class="user-purchase-details">@item.IsSuspended</div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="user-purchase">
+                <div class="empty-history">Nothing to show here...</div>
+            </div>
+        }
+        <div class="history-legend">
+            <p>Is Processed - purchase monitoring system processed this order and added status flag</p>
+            <p>Is Confirmed - system confirmed this order</p>
+            <p>Is Suspended - this order has been suspended. Should be checked before next steps of the process</p>
+        </div>
+    </div>
+
+</div>

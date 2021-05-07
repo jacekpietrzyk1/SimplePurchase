@@ -53,9 +53,14 @@ namespace SimplePurchase.Web.PurchaseMonitor
 
         private void ConfirmPurchase(Service.Models.Store.PurchaseModel item)
         {
-            _purchaseService.MarkAsProcessed(item.Id);
-            var email = _userService.GetUserEmail(item.UserId);
-            NotifyAbountPurchaseStatus("Dear User, your purchase has been confirmed.", email);
+            var isProcessed = _purchaseService.MarkAsProcessed(item.Id);
+            var isConfirmed = _purchaseService.MarkAsConfirmed(item.Id);
+
+            if (isProcessed && isConfirmed)
+            {
+                var email = _userService.GetUserEmail(item.UserId);
+                NotifyAbountPurchaseStatus("Dear User, your purchase has been confirmed.", email);
+            }
         }
 
         private void SuspendPurchase(Service.Models.Store.PurchaseModel item)

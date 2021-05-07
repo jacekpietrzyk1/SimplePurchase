@@ -9,9 +9,13 @@ namespace SimplePurchase.Application.Interfaces
 
         IEnumerable<PurchaseEntity> GetNewPurchases();
 
+        IEnumerable<PurchaseEntity> GetAllUserPurchases(string userId);
+
         int MarkPurchaseAsProcessed(string purchaseId);
 
         int MarkPurchaseAsSuspended(string purchaseId);
+
+        int MarkPurchaseAsConfirmed(string purchaseId);
 
         decimal GetAveragePurchaseAmount(string userId);
     }

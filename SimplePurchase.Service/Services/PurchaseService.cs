@@ -108,6 +108,18 @@ namespace SimplePurchase.Service.Services
             return newPurchaseModels;
         }
 
+        public IEnumerable<PurchaseModel> GetAllUserPurchases(string userId)
+        {
+            var purchaseEntities = _purchaseRepository.GetAllUserPurchases(userId);
+
+            if (!purchaseEntities.Any())
+                return null;
+
+            var purchaseModels = Mapping.Mapper.Map<IEnumerable<PurchaseModel>>(purchaseEntities);
+
+            return purchaseModels;
+        }
+
         public bool SuspendPurchase(string purchaseId)
         {
             var result = _purchaseRepository.MarkPurchaseAsSuspended(purchaseId);
@@ -117,6 +129,12 @@ namespace SimplePurchase.Service.Services
         public bool MarkAsProcessed(string purchaseId)
         {
             var result = _purchaseRepository.MarkPurchaseAsProcessed(purchaseId);
+            return result > 0;
+        }
+
+        public bool MarkAsConfirmed(string purchaseId)
+        {
+            var result = _purchaseRepository.MarkPurchaseAsConfirmed(purchaseId);
             return result > 0;
         }
 
